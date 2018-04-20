@@ -68,7 +68,7 @@ getEmpleado(4).then( empleado => {
 
 // -- hace lo mismo que la funcion anterior, pero manera mas facil los errores
 // en un catch
-getEmpleado(1).then( empleado => {
+getEmpleado(2).then( empleado => {
 
   return getSalario( empleado );
 
