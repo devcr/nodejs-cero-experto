@@ -17,7 +17,9 @@ app.get('/usuario', function (req, res) {
   let limite = req.query.limite || 5;
   limite = Number(limite);
 
-  Usuario.find({}, 'nombre email')
+  let filter = {estado: true};
+
+  Usuario.find(filter, 'nombre email')
   .skip(desde)
   .limit(limite)
   .exec( (err, usuarios) =>{
@@ -29,7 +31,7 @@ app.get('/usuario', function (req, res) {
       });
     }
 
-    Usuario.count({}, (err, conteo) =>{
+    Usuario.count(filter, (err, conteo) =>{
       res.json({
         ok: true,
         conteo,
@@ -93,10 +95,19 @@ app.put('/usuario/:id', function (req, res) {
   })
 });
 
+
+//Nota: con este metodo damos de baja logicamente al usuario
+//poniendo el false la bandera
 app.delete('/usuario/:id', function(req, res){
 
   let id = req.params.id;
-  Usuario.findByIdAndRemove(id, (err, usuarioBorrado) =>{
+
+  let newEstado = {
+    estado: false
+  }
+
+  Usuario.findByIdAndUpdate(id, newEstado, { new: true, runValidators: true }, (err, usuarioBorrado) =>{
+  //Usuario.findByIdAndRemove(id, (err, usuarioBorrado) =>{
 
     if( err){
       return res.status(400).json({
@@ -109,13 +120,14 @@ app.delete('/usuario/:id', function(req, res){
       return res.status(400).json({
         ok:false,
         err:{
-          mensaje: 'Usuario no existe'
+          mensaje: 'Usuario no existeHH'
         }
       });
     }
 
     res.json({
       ok: true,
+      msg:'Usuario borrado logicamente',
       usuario: usuarioBorrado
     });
 
