@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 // ver http://underscorejs.org/
 const _ = require('underscore');
 const Usuario = require('../models/usuario');
-const { verificaToken } = require('../middlewares/autenticacion');
+const { verificaToken, verificaAdminRole } = require('../middlewares/autenticacion');
 const app = express();
 
 
@@ -44,7 +44,7 @@ app.get('/usuario', verificaToken,  (req, res) => {
   //res.json('get Usuario')
 });
 
-app.post('/usuario', function (req, res) {
+app.post('/usuario', [verificaToken, verificaAdminRole], (req, res) => {
 
   let body = req.body;
 
@@ -72,7 +72,7 @@ app.post('/usuario', function (req, res) {
   });
 });
 
-app.put('/usuario/:id', function (req, res) {
+app.put('/usuario/:id', [verificaToken, verificaAdminRole], (req, res) => {
   let id = req.params.id;
 
   //-- con esta linea se indica que campos pueden ser modificados
@@ -98,7 +98,7 @@ app.put('/usuario/:id', function (req, res) {
 
 //Nota: con este metodo damos de baja logicamente al usuario
 //poniendo el false la bandera
-app.delete('/usuario/:id', function(req, res){
+app.delete('/usuario/:id', [verificaToken, verificaAdminRole], (req, res) => {
 
   let id = req.params.id;
 

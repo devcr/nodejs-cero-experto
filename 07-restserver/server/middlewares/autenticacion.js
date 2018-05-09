@@ -28,7 +28,26 @@ let verificaToken = (req, res, next) =>{
 
 }
 
+let verificaAdminRole = ( req, res, next) =>{
+
+  let usuario = req.usuario;
+
+  if(usuario.rol === 'ADMIN_ROLE' ){
+    console.log('Usuario admimistrador');
+    next();
+  }else{
+    return res.json({
+      ok: false,
+      err: {
+          msg: 'Usuario NO Autorizado'
+      }
+    });
+  }
+
+}
+
 
 module.exports = {
-  verificaToken
+  verificaToken,
+  verificaAdminRole
 }
