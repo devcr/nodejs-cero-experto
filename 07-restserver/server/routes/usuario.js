@@ -4,12 +4,12 @@ const bcrypt = require('bcrypt');
 // La libreria underscore ayuda a definir que campos no actualizar en el update
 // ver http://underscorejs.org/
 const _ = require('underscore');
-
 const Usuario = require('../models/usuario');
+const { verificaToken } = require('../middlewares/autenticacion');
 const app = express();
 
-app.get('/usuario', function (req, res) {
 
+app.get('/usuario', verificaToken,  (req, res) => {
   // valor de variable para indicar desde que registro tomar
   let desde = req.query.desde || 0;
   desde = Number(desde);

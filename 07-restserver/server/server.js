@@ -15,7 +15,9 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
-app.use( require('./routes/usuario'));
+//-- cnfiguracion global de rutas
+app.use(require('./routes/index'));
+// app.use( require('./routes/login'));
 
 mongoose.connect('mongodb://localhost:27017/cafe', (err, resp) =>{
 
