@@ -9,7 +9,7 @@ const { verificaToken, verificaAdminRole } = require('../middlewares/autenticaci
 const app = express();
 
 
-app.get('/usuario', verificaToken,  (req, res) => {
+app.get('/usuario',  (req, res) => {
   // valor de variable para indicar desde que registro tomar
   let desde = req.query.desde || 0;
   desde = Number(desde);
@@ -43,6 +43,7 @@ app.get('/usuario', verificaToken,  (req, res) => {
 
   //res.json('get Usuario')
 });
+
 
 app.post('/usuario', [verificaToken, verificaAdminRole], (req, res) => {
 
@@ -120,7 +121,7 @@ app.delete('/usuario/:id', [verificaToken, verificaAdminRole], (req, res) => {
       return res.status(400).json({
         ok:false,
         err:{
-          mensaje: 'Usuario no existeHH'
+          mensaje: 'Usuario no existe'
         }
       });
     }
