@@ -11,12 +11,12 @@ let urlDB;
 if(process.env.NODE_ENV === 'env'){
   urlDB = 'mongodb://localhost:27017/cafe';
 }else{
-  urlDB = 'mongodb://dev:admindb76@ds117590.mlab.com:17590/cafe';
+  urlDB = process.env.MONGO_URI;
 }
 
 // amaro url para apiuntar directo a prod (solo para probar)
 //urlDB = 'mongodb://dev:admindb76@ds117590.mlab.com:17590/cafe';
-console.log(`urlDB--> ${urlDB}`);
+//console.log(`urlDB--> ${urlDB}`);
 process.env.URLDB = urlDB;
 
 // Caducidad jsonwebtoken
