@@ -64,6 +64,39 @@ app.get('/producto/:id', (req, res) =>{
 
 });
 
+app.get('/producto/buscar/:termino', (req, res) =>{
+
+  let termino = req.params.termino;
+  // se crea una expresion regular, la i es para que sea insensible
+  // a mayusculuas y minusculas
+  let regexp = new RegExp( termino, 'i' );
+
+  Producto.find({ nombre: regexp })
+  .sort('nombre')
+  .populate('categoria', 'descripcion')
+  .populate('usuario', 'nombre rol')
+  .exec((err, productosDB) =>{
+
+    if(err){
+      return res.status(500).json({
+        ok: false,
+        err
+      });
+    }
+
+    Producto.count({ nombre: regexp }, (err, contador) =>{
+
+      if(err){
+        return res.status(500).json({ ok: false, err });
+      }
+
+      res.status(200).json({ok: true, regs: contador, productos: productosDB});
+    });
+
+  });
+
+});
+
 
 app.post('/producto', [verificaToken, verificaAdminRole], (req, res) =>{
 
