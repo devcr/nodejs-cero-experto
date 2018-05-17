@@ -2,5 +2,6 @@
 node_modules/
 *.log
 03-bases-node/tablas/*.txt
+uploads/
 
 
