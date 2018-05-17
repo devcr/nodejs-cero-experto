@@ -46,8 +46,35 @@ let verificaAdminRole = ( req, res, next) =>{
 
 }
 
+// Este metodo se hizo para validar el token y poder mostrar la imagen en la
+// pagina public/index.html
+let verificaTokenImg = (req, res, next) =>{
+
+  let token = req.query.token;
+
+  jwt.verify( token, process.env.SEED, (err, decoded) =>{
+
+    if(err){
+      return res.status(401).json({
+        ok:false,
+        err
+      })
+    }
+
+    // Esta linea permite que se tenga la informcaion del usuario
+    // Nota: decoded es todo el contenido del payload
+    req.usuario = decoded.usuario;
+
+    // el next permite continuar con el flujo del codigo de la funcion con la ruta
+    next();
+
+  });
+
+}
+
 
 module.exports = {
   verificaToken,
-  verificaAdminRole
+  verificaAdminRole,
+  verificaTokenImg
 }

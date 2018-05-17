@@ -6,6 +6,7 @@ const path = require('path');
 const fs = require('fs');
 
 const Usuario = require('../models/usuario');
+const Producto = require('../models/producto');
 
 // default options  (uso del middleware)
 app.use(fileUpload());
@@ -58,6 +59,8 @@ app.put('/upload/:tipo/:id', (req, res) => {
 
     if( tipo === 'usuarios' ){
       imagenUsuario(id, res, nombreArchivo, tipo);
+    }else{
+      imagenProducto(id, res, nombreArchivo, tipo);
     }
 
   });
@@ -91,6 +94,45 @@ function imagenUsuario(id, res, nombreArchivo, tipo){
     usuarioDB.img = nombreArchivo;
 
     usuarioDB.save((err, usuarioUpd)=>{
+      res.json({
+        ok: true,
+        img: nombreArchivo,
+        usuario: usuarioUpd
+      });
+    });
+
+  });
+
+}
+
+
+function imagenProducto(id, res, nombreArchivo, tipo){
+
+  Producto.findById( id, (err, ProductoDB)=>{
+
+    if (err){
+      borrarArchivo(nombreArchivo, tipo);
+      return res.status(500).json({
+        ok: false,
+        err
+      });
+    }
+
+    if (!ProductoDB){
+      borrarArchivo(nombreArchivo, tipo);
+      return res.status(404).json({
+        ok: false,
+        err:{
+          mensaje: `usuarioDB ${id}`
+        }
+      });
+    }
+
+    borrarArchivo(ProductoDB.img, tipo);
+
+    ProductoDB.img = nombreArchivo;
+
+    ProductoDB.save((err, usuarioUpd)=>{
       res.json({
         ok: true,
         img: nombreArchivo,
