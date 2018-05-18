@@ -14,25 +14,12 @@ const port = process.env.PORT || 3000;
 
 app.use(express.static(publicPath));
 
-let io = socketIO(server);
+//let io = socketIO(server);
+module.exports.io = socketIO(server);
+require('./sockets/socket');
 
-io.on('connect', (client) =>{
-  console.log('Usuario conectado!!');
-
-  client.on('disconnect', (client) =>{
-    console.log('!!Usuario desconectado!!');
-  });
-
-  client.on('enviarMensaje', (mensaje) =>{
-    console.log(mensaje);
-  });
-
-});
 
 server.listen(port, (err) => {
-
     if (err) throw new Error(err);
-
     console.log(`Servidor corriendo en puerto ${ port }`);
-
 });
