@@ -4,6 +4,7 @@ const fs = require('fs');
 class TicketControl{
 
   constructor(){
+    console.log('CONSTRUCTOR ON ..');
 
     this.ultimo = 0;
     this.hoy = new Date().getDate();
@@ -24,7 +25,7 @@ class TicketControl{
   siguiente(){
 
     this.ultimo += 1;
-    console.log(`siguiente()_ ultimo-> ${this.ultimo}`);
+    //console.log(`siguiente()_ ultimo-> ${this.ultimo}`);
     this.grabarArchivo();
 
     return `Ticket ${this.ultimo}`;
