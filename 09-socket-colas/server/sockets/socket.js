@@ -21,4 +21,28 @@ io.on('connection', (client) => {
 
     });
 
+    //-- envio valor de ticket actual al cliente (al cagar la pantalla)
+    client.emit('ticketActual', {
+      actual: ticketControl.getUltimoticket(),
+      ultimos4: ticketControl.getUltimos4() 
+    });
+
+
+    client.on('atenderTicket', (data, callback) =>{
+
+      if( !data.escritorio ){
+        return callback({
+          err : true,
+          mensaje: 'El escritorio es necesario'
+        });
+      }
+
+      let atenderTicket = ticketControl.atenderTicket( data.escritorio );
+
+      callback(atenderTicket);
+
+      // actulizar notificar cambios en los ultios 4
+
+    });
+
 });

@@ -21,3 +21,8 @@ $('button').on('click', function(ticket){
   });
 
 });
+
+//-- Muestra valor de ticket actual cargar pantalla
+socket.on('ticketActual',  function (data) {
+  label.text(data.actual);
+});
