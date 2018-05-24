@@ -24,7 +24,7 @@ io.on('connection', (client) => {
     //-- envio valor de ticket actual al cliente (al cagar la pantalla)
     client.emit('ticketActual', {
       actual: ticketControl.getUltimoticket(),
-      ultimos4: ticketControl.getUltimos4() 
+      ultimos4: ticketControl.getUltimos4()
     });
 
 
@@ -42,6 +42,9 @@ io.on('connection', (client) => {
       callback(atenderTicket);
 
       // actulizar notificar cambios en los ultios 4
+      cliet.broadcast.emit('ultimos4', {
+        ultimos4: ticketControl.getUltimos4()
+      });
 
     });
 
