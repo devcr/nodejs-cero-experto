@@ -9,12 +9,17 @@ io.on('connection', (client) => {
 
   client.on('entrarChat', (data, callback) =>{
 
-    if( !data.nombre ){
+    console.log(data);
+
+    if( !data.nombre || !data.sala ){
      return callback({
        err: true,
-       mensaje: 'El nombre es necesario'
+       mensaje: 'El nombre/sala es necesario'
      });
     }
+
+    // agrego al cliente a una sala de chat
+    client.join(data.sala);
 
     let personas = usuarios.agregarPersona( client.id, data.nombre );
 

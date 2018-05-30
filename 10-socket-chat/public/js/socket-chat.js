@@ -2,20 +2,21 @@ var socket = io();
 
 var params = new URLSearchParams(window.location.search);
 
-if( !params.has('nombre') ){
+if( !params.has('nombre') || !params.has('sala') ){
   window.location = 'index.html';
-  throw new Error('El nombre es ncesario');
+  throw new Error('El nombre y sala son ncesarios');
 }
 
 
-var nombre = {
-  nombre : params.get('nombre')
+var usuario = {
+  nombre : params.get('nombre'),
+  sala: params.get('sala')
 }
 
 socket.on('connect', function() {
     console.log('Conectado al servidor');
 
-    socket.emit('entrarChat', nombre, function(resp){
+    socket.emit('entrarChat', usuario, function(resp){
       console.log('usuarios conectados ', resp);
 
 
@@ -54,7 +55,7 @@ socket.on('listaPersona', function(personas){
 });
 
 
-// mensaje privado
+// mensajes privado
 socket.on('mensajePrivado', function(mensaje){
   console.log('Mensaje privado: ', mensaje);
 });
