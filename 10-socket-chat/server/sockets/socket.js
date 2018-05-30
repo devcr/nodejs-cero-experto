@@ -9,8 +9,6 @@ io.on('connection', (client) => {
 
   client.on('entrarChat', (data, callback) =>{
 
-    console.log(data);
-
     if( !data.nombre || !data.sala ){
      return callback({
        err: true,
@@ -21,7 +19,9 @@ io.on('connection', (client) => {
     // agrego al cliente a una sala de chat
     client.join(data.sala);
 
-    let personas = usuarios.agregarPersona( client.id, data.nombre );
+    let personas = usuarios.agregarPersona( client.id, data.nombre, data.sala );
+
+    client.broadcast.to(data.sala).emit('listaPersona', usuarios.getPersonasPorSala(data.sala));
 
     callback(personas);
 
@@ -37,7 +37,7 @@ io.on('connection', (client) => {
 
     //NOTA: tambien se pudo tomar el nombre del user asi:  data.nombre
     let mensaje = crearMensaje( persona.nombre, data.mensaje );
-    client.broadcast.emit('crearMensaje', mensaje);
+    client.broadcast.to(persona.sala).emit('crearMensaje', mensaje);
 
   });
 
@@ -45,10 +45,10 @@ io.on('connection', (client) => {
     let borrado = usuarios.borrarPersona(client.id);
 
     // Notifico a los clinetes que tal usuario abano el entrarChat
-    client.broadcast.emit('crearMensaje', crearMensaje('Adminstrador', `${borrado.nombre} abandono el chat`));
+    client.broadcast.to(borrado.sala).emit('crearMensaje', crearMensaje('Adminstrador', `${borrado.nombre} abandono el chat`));
 
-    // regresa lista a los clintes la lista de usuarios aun conectados
-    client.broadcast.emit('listaPersona', usuarios.getPersonas());
+    // regresa lista a los clientes la lista de usuarios aun conectados
+    client.broadcast.to(borrado.sala).emit('listaPersona', usuarios.getPersonasPorSala(borrado.sala));
 
   });
 
